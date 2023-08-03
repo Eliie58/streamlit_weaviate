@@ -65,10 +65,10 @@ data_obj = {
 uuid = connection.create(data_obj, "Publication")
 ```
 
-### Get Objects
+### Get All Objects
 
 ```
-connection.data_object().get(class_name="Publication")
+connection.get_all("Publication")
 ```
 
 ### Other functionality

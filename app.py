@@ -93,7 +93,7 @@ def layout() -> None:
             classes
         )
         if class_name:
-            all_objects = CONNECTION.data_object().get(class_name=class_name)
+            all_objects = CONNECTION.get_all(class_name=class_name)
             st.json(all_objects)
 
 

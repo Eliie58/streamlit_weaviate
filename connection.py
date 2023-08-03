@@ -1,14 +1,15 @@
 '''
 Weaviate connection with streamlit
 '''
-from typing import Dict
+from typing import Optional, Dict, Any
 
+import streamlit as st
+from streamlit.connections import ExperimentalBaseConnection
+from streamlit.errors import StreamlitAPIException
 import weaviate
 from weaviate.data import DataObject
 from weaviate.gql import Query
 from weaviate.schema import Schema
-from streamlit.connections import ExperimentalBaseConnection
-from streamlit.errors import StreamlitAPIException
 
 
 CONSISTENCY_LEVEL = weaviate.data.replication.ConsistencyLevel.ALL
@@ -123,6 +124,25 @@ class WeaviateConnection(ExperimentalBaseConnection[weaviate.Client]):
         DataObject
         """
         return self._instance.data_object
+
+    @st.cache_data(ttl=30)
+    def get_all(_self, class_name: str) -> Optional[Dict[str, Any]]:
+        """
+        Gets all objects from Weaviate for class, the maximum number of objects returned is 100.
+
+        Parameters
+        ----------
+        class_name: str
+            The class name of the objects.
+
+        Returns
+        -------
+        list of dicts
+            A list of all objects. If no objects where found the list is empty.
+        """
+        print(f"Getting all for class {class_name}")
+        data_object = _self._instance.data_object
+        return data_object.get(class_name=class_name)
 
     def create(self, data_obj: Dict, class_name: str) -> str:
         """
